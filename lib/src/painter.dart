@@ -56,6 +56,7 @@ class ImagePainter extends StatefulWidget {
     this.applyFilters,
     this.onDone,
     this.textDelegate,
+    this.onImageConverted,
   }) : super(key: key);
 
   ///Constructor for loading image from network url.
@@ -114,6 +115,8 @@ class ImagePainter extends StatefulWidget {
 
     ///text delegate
     TextDelegate? textDelegate,
+
+    final ValueChanged<File?>? onImageConverted,
   }) {
     return ImagePainter._(
       key: key,
@@ -135,6 +138,7 @@ class ImagePainter extends StatefulWidget {
       onStrokeWidthChanged: onStrokeWidthChanged,
       onFontSizeChanged: onFontSizeChanged,
       textDelegate: textDelegate,
+      onImageConverted: onImageConverted,
     );
   }
 
@@ -247,6 +251,7 @@ class ImagePainter extends StatefulWidget {
     ValueChanged<double>? onStrokeWidthChanged,
     ValueChanged<double>? onFontSizeChanged,
     TextDelegate? textDelegate,
+    ValueChanged<File?>? onImageConverted, // Added to constructor
   }) {
     return ImagePainter._(
       key: key,
@@ -272,6 +277,7 @@ class ImagePainter extends StatefulWidget {
       onStrokeWidthChanged: onStrokeWidthChanged,
       onFontSizeChanged: onFontSizeChanged,
       textDelegate: textDelegate,
+      onImageConverted: onImageConverted,
     );
   }
 
@@ -432,6 +438,8 @@ class ImagePainter extends StatefulWidget {
   ///the text delegate
   final TextDelegate? textDelegate;
 
+  ///on image converted
+  ValueChanged<File?>? onImageConverted;
   @override
   ImagePainterState createState() => ImagePainterState();
 }
@@ -687,7 +695,6 @@ class ImagePainterState extends State<ImagePainter> {
               },
               child:
                   widget.sendButtonWidget ??
-                  ///Removed from the package due to customizations
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FloatingActionButton(
@@ -716,7 +723,7 @@ class ImagePainterState extends State<ImagePainter> {
     );
   }
 
-  convertImage() async {
+  Future<File?> convertImage() async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -724,19 +731,37 @@ class ImagePainterState extends State<ImagePainter> {
         return Center(child: CircularProgressIndicator());
       },
     );
-    RenderRepaintBoundary boundary = _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    Uint8List pngBytes = byteData!.buffer.asUint8List();
 
-    //create file
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    String fullPath = '$dir/${DateTime.now().millisecond}.png';
-    capturedFile = File(fullPath);
-    await capturedFile!.writeAsBytes(pngBytes);
-    Navigator.pop(context);
-    widget.onDone!.call(capturedFile!.path);
-    print("path is " + capturedFile!.path.toString());
+    try {
+      RenderRepaintBoundary boundary = _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData == null) throw Exception("Failed to convert image to byte data");
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      // Create file
+      String dir = (await getApplicationDocumentsDirectory()).path;
+      String fullPath = '$dir/${DateTime.now().millisecond}.png';
+      capturedFile = File(fullPath);
+      await capturedFile!.writeAsBytes(pngBytes);
+
+      Navigator.pop(context);
+
+      if (widget.onImageConverted != null) {
+        widget.onImageConverted!(capturedFile);
+      }
+
+      if (widget.onDone != null) {
+        widget.onDone!.call(capturedFile!.path);
+      }
+
+      print("path is " + capturedFile!.path.toString());
+      return capturedFile;
+    } catch (e) {
+      Navigator.pop(context);
+      print("Error in convertImage: $e");
+      return null;
+    }
   }
 
   ///Fires while user is interacting with the screen to record painting.
