@@ -1,0 +1,41 @@
+name: camera_filters
+
+description: This package will use camera with dynamic color list of filters, crop your image, text on image and change the text color.
+version: 0.3.1
+
+homepage: https://github.com/hamzasidd3634/camera_filter
+
+environment:
+  sdk: ^3.8.1
+dependencies:
+  flutter:
+    sdk: flutter
+  camera: ^0.11.1 
+  path_provider: ^2.1.5
+  image_cropper: ^9.1.0
+  flutter_colorpicker: ^1.1.0
+  image: ^4.5.4
+  get_storage: ^2.1.1
+  google_fonts: ^6.2.1
+  vector_math: ^2.1.4
+  video_player: ^2.10.0
+  flutter_lints: ^4.0.0
+  flutter_svg: ^2.2.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.hamza.camera_filters
+        pluginClass: VideoEditorPlugin
+      ios:
+        pluginClass: VideoEditorPlugin
+  assets:
+    - assets/
+  module:
+    androidX: true
