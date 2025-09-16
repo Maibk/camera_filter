@@ -15,9 +15,9 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/video_player_android-2.7.3" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_android-2.2.10" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_cropper_for_web-6.0.2" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/camera-0.11.0+2" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/camera_android_camerax-0.6.8+3" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_cropper-8.0.2" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/camera-0.11.2" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/camera_android_camerax-0.6.21" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_cropper-9.1.0" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
