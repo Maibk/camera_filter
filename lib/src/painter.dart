@@ -55,6 +55,7 @@ class ImagePainter extends StatefulWidget {
     this.filter,
     this.applyFilters,
     this.onDone,
+    this.onSave,
     this.textDelegate,
     this.onImageConverted,
   }) : super(key: key);
@@ -235,6 +236,7 @@ class ImagePainter extends StatefulWidget {
     bool? applyFilters,
     ColorFilter? filter,
     Function? onDone,
+    Function? onSave,
     bool? scalable,
     Widget? placeholderWidget,
     List<Color>? colors,
@@ -263,6 +265,7 @@ class ImagePainter extends StatefulWidget {
       placeHolder: placeholderWidget,
       colors: colors,
       onDone: onDone,
+      onSave: onSave,
       isScalable: scalable ?? false,
       brushIcon: brushIcon,
       undoIcon: undoIcon,
@@ -381,6 +384,7 @@ class ImagePainter extends StatefulWidget {
   ///Width of the widget. Image is subjected to fit within the given width.
   final double? width;
   final Function? onDone;
+  final Function? onSave;
 
   ///Widget to be shown during the conversion of provided image to [ui.Image].
   final Widget? placeHolder;
@@ -753,6 +757,10 @@ class ImagePainterState extends State<ImagePainter> {
 
       if (widget.onDone != null) {
         widget.onDone!.call(capturedFile!.path);
+      }
+
+      if (widget.onSave != null) {
+        widget.onSave!.call(capturedFile!.path);
       }
 
       print("path is " + capturedFile!.path.toString());

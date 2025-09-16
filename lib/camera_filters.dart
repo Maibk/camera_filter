@@ -16,6 +16,7 @@ import 'package:path_provider/path_provider.dart';
 class CameraScreenPlugin extends StatefulWidget {
   /// this function will return the path of edited picture
   Function(dynamic)? onDone;
+  Function(dynamic)? onSave;
 
   /// this function will return the path of edited video
   Function(dynamic)? onVideoDone;
@@ -42,6 +43,7 @@ class CameraScreenPlugin extends StatefulWidget {
   CameraScreenPlugin({
     Key? key,
     this.onDone,
+    this.onSave,
     this.onVideoDone,
     this.filters,
     this.videoTimeLimit,
@@ -188,6 +190,7 @@ class _CameraScreenState extends State<CameraScreenPlugin> with TickerProviderSt
                 file.path,
                 applyFilters: widget.applyFilters,
                 onVideoDone: widget.onVideoDone,
+
                 sendButtonWidget: widget.sendButtonWidget,
               ),
             ),
@@ -536,6 +539,7 @@ class _CameraScreenState extends State<CameraScreenPlugin> with TickerProviderSt
                   BlendMode.softLight,
                 ),
                 onDone: widget.onDone,
+                onSave: widget.onSave,
               ),
             ),
           ).then((value) {

@@ -14,13 +14,14 @@ class EditImageScreen extends StatefulWidget {
 
   ///function return the edited image path
   Function(dynamic)? onDone;
+  Function(dynamic)? onSave;
 
   ///send button widget
   Widget? sendButtonWidget;
 
   bool applyFilters;
 
-  EditImageScreen({Key? key, this.path, this.filter, this.onDone, this.sendButtonWidget, this.applyFilters = true})
+  EditImageScreen({Key? key, this.path, this.filter, this.onDone, this.sendButtonWidget, this.applyFilters = true , this.onSave})
     : super(key: key);
 
   @override
@@ -28,10 +29,8 @@ class EditImageScreen extends StatefulWidget {
 }
 
 class _EditImageScreenState extends State<EditImageScreen> {
-  /// image key
   final _imageKey = GlobalKey<ImagePainterState>();
 
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -45,6 +44,7 @@ class _EditImageScreenState extends State<EditImageScreen> {
           applyFilters: widget.applyFilters,
           initialStrokeWidth: 2,
           onDone: widget.onDone,
+          onSave: widget.onSave,
           sendButtonWidget: widget.sendButtonWidget,
           width: MediaQuery.of(context).size.width,
           initialColor: widget.applyFilters == false ? Colors.transparent : Colors.green,
